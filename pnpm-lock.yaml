@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      native-signal:
-        specifier: ^0.5.5
-        version: 0.5.5
     devDependencies:
       '@types/node':
         specifier: ^20.11.0
@@ -18,6 +14,9 @@ importers:
       happy-dom:
         specifier: ^15.7.4
         version: 15.11.7
+      native-signal:
+        specifier: ^0.5.16
+        version: 0.5.16
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
@@ -449,8 +448,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  native-signal@0.5.5:
-    resolution: {integrity: sha512-TmpT9RvX66QBAV2u3Do4fTPfPaogSMbTlW7HQgt5aaWSWDIs2Jec2Ba9UngFdXtKTiHRMkNu/r5cSsUnzIWMVA==}
+  native-signal@0.5.16:
+    resolution: {integrity: sha512-OjVjLKeW/p3T1XmWJerXp9yzmol31DM2H4V5pNwPe57NU07eY12MvocF/hIU3LSYp01/j+7cOt+1GvaxY7Gz2g==}
 
   npm-run-path@5.3.0:
     resolution: {integrity: sha512-ppwTtiJZq0O/ai0z7yfudtBpWIoxM8yE6nHi1X47eFR2EWORqfbu6CnPlNsjeN683eT0qG6H/Pyf9fCcvjnnnQ==}
@@ -970,7 +969,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  native-signal@0.5.5: {}
+  native-signal@0.5.16: {}
 
   npm-run-path@5.3.0:
     dependencies:
