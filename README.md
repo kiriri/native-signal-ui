@@ -1,7 +1,7 @@
 # signal-ui
 
 A minimal, signal-based UI framework built around tagged template literals.
-No virtual DOM, no JSX, no compiler — just `html\`\`` and `css\`\``.
+No virtual DOM, but now with jsx instead of custom template strings.
 
 ## Install
 
