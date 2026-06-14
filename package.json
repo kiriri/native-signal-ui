@@ -1,6 +1,6 @@
 {
   "name": "native-signal-ui",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A super-simple signal-based UI framework based on my custom signal framework `native-signal`",
   "type": "module",
   "files": [
