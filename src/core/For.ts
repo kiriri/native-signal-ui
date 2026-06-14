@@ -24,7 +24,7 @@ export function ForKeyed<K extends PropertyKey, T extends Record<K, string | num
     key: K,
     generator: (() => T[]) | { get(): T[] },
     mapper: (item: T) => JSX.Element
-): { toHtml(): Element }
+): { to_html(): Element }
 {
     const start = document.createElement("template");
     const end   = document.createElement("template");
@@ -87,7 +87,7 @@ export function ForKeyed<K extends PropertyKey, T extends Record<K, string | num
     own(sync, end);
 
     return {
-        toHtml()
+        to_html()
         {
             return fragment as unknown as Element;
         }
