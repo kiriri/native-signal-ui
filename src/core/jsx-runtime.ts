@@ -198,7 +198,7 @@ export function bind_style_signal(el: HTMLElement, key: string, signal: Reactive
         if (v === undefined || v === null) 
             el.style.removeProperty(key);
         else 
-            el.style.setProperty(key, String(v));
+            el.style.setProperty(key, v as string);
     }, undefined, true);
     own(computed, el);
 }
@@ -213,7 +213,7 @@ export function apply_style_prop(el: HTMLElement, value: unknown, key?: string):
         else if (value === undefined || value === null) 
             el.style.removeProperty(key);
         else 
-            el.style.setProperty(key, String(value));
+            el.style.setProperty(key, value as string);
         return;
     }
 
@@ -228,7 +228,7 @@ export function apply_style_prop(el: HTMLElement, value: unknown, key?: string):
                 if (val === undefined || val === null) 
                     el.style.removeProperty(k);
                 else 
-                    el.style.setProperty(k, String(val));
+                    el.style.setProperty(k, val as string);
             }
         } 
         else if (typeof v === "string")
@@ -272,7 +272,7 @@ export function apply_prop(el: Element, key: string, value: unknown): void
     }
     if (key === "class" || key === "className")
     {
-        (el as HTMLElement).className = value == null ? "" : String(value);
+        (el as HTMLElement).className = value == null ? "" : value as string;
         return;
     }
     if (key === "style")
