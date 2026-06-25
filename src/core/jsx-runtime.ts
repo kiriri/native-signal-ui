@@ -7,14 +7,15 @@ import { Component } from "../components/Component";
  * Types
  * ────────────────────────────────────────────────────────────────────────── */
 
-interface Reactive<T = unknown> {
-    get():T
+interface Reactive<T = unknown>
+{
+    get(): T
 }
 
 
 //NativeSignal<T> | Computed<T>;
 
-export type A = 
+export type A =
     | number
     | A[];
 
@@ -195,9 +196,9 @@ export function bind_style_signal(el: HTMLElement, key: string, signal: Reactive
     const computed = new Computed(() =>
     {
         const v = signal.get();
-        if (v === undefined || v === null) 
+        if (v === undefined || v === null)
             el.style.removeProperty(key);
-        else 
+        else
             el.style.setProperty(key, v as string);
     }, undefined, true);
     own(computed, el);
@@ -208,11 +209,11 @@ export function apply_style_prop(el: HTMLElement, value: unknown, key?: string):
     // Single-property mode: `style:color={...}` routes here with key === "color".
     if (key !== undefined)
     {
-        if (is_reactive(value)) 
+        if (is_reactive(value))
             bind_style_signal(el, key, value);
-        else if (value === undefined || value === null) 
+        else if (value === undefined || value === null)
             el.style.removeProperty(key);
-        else 
+        else
             el.style.setProperty(key, value as string);
         return;
     }
@@ -225,12 +226,12 @@ export function apply_style_prop(el: HTMLElement, value: unknown, key?: string):
             for (const k in obj)
             {
                 const val = obj[k];
-                if (val === undefined || val === null) 
+                if (val === undefined || val === null)
                     el.style.removeProperty(k);
-                else 
+                else
                     el.style.setProperty(k, val as string);
             }
-        } 
+        }
         else if (typeof v === "string")
         {
             el.setAttribute("style", v);
@@ -241,7 +242,7 @@ export function apply_style_prop(el: HTMLElement, value: unknown, key?: string):
     {
         const computed = new Computed(() => apply_static(value.get()), undefined, true);
         own(computed, el);
-    } 
+    }
     else if (value && typeof value === "object")
     {
         const obj = value as Record<string, unknown>;
@@ -249,13 +250,13 @@ export function apply_style_prop(el: HTMLElement, value: unknown, key?: string):
         for (const k in obj)
         {
             const v = obj[k];
-            if (is_reactive(v)) 
+            if (is_reactive(v))
                 bind_style_signal(el, k, v);
-            else 
+            else
                 plain[k] = v as any;
         }
         apply_static(plain);
-    } 
+    }
     else
     {
         apply_static(value);
@@ -280,12 +281,16 @@ export function apply_prop(el: Element, key: string, value: unknown): void
         apply_style_prop(el as HTMLElement, value);
         return;
     }
+    if (value === undefined || value === null )
+    {
+        el.removeAttribute(key);
+        if (key in el) { try { (el as any)[key] = ""; } catch { } } // optional, clears reflected prop
+        return;
+    }
     if (key in el)
     {
         try { (el as any)[key] = value; return; } catch { }
     }
-    if (value === undefined || value === null || value === false)
-        el.removeAttribute(key);
     else if (value === true)
         el.setAttribute(key, "");
     else
