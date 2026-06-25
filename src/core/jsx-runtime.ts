@@ -284,12 +284,22 @@ export function apply_prop(el: Element, key: string, value: unknown): void
     if (value === undefined || value === null )
     {
         el.removeAttribute(key);
-        if (key in el) { try { (el as any)[key] = ""; } catch { } } // optional, clears reflected prop
+        // clears reflected prop if null
+        if (value === null && key in el ) 
+        { 
+            try 
+            { 
+                (el as any)[key] = ""; 
+            } catch { } 
+        } 
         return;
     }
     if (key in el)
     {
-        try { (el as any)[key] = value; return; } catch { }
+        try 
+        { 
+            (el as any)[key] = value; 
+        } catch { }
     }
     else if (value === true)
         el.setAttribute(key, "");
