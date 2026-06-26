@@ -281,7 +281,7 @@ export function apply_prop(el: Element, key: string, value: unknown): void
         apply_style_prop(el as HTMLElement, value);
         return;
     }
-    if (value === undefined || value === null )
+    if (value === undefined || value === null || value === false )
     {
         el.removeAttribute(key);
         // clears reflected prop if null

@@ -5,7 +5,10 @@
   "type": "module",
   "files": [
     "dist",
-    "src"
+    "src",
+    "docs",
+    "AGENTS.md",
+    "llms.txt"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",

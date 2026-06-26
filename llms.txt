@@ -1,0 +1,18 @@
+# native-signal-ui
+
+> A minimal, signal-based UI library. JSX evaluates to real DOM nodes; signals
+> bind directly to the attributes and text nodes that depend on them — no virtual
+> DOM, no diffing, no re-renders. Built on `native-signal` (signal primitives are
+> imported from `native-signal/weak`). Uses the classic JSX transform
+> (`runtime.h` / `runtime.Fragment`).
+
+## Docs
+
+- [Agent index & invariants](./AGENTS.md): start here
+- [Setup (Vite + TypeScript)](./docs/setup.md): JSX factory wiring, global JSX types
+- [Reactivity in JSX](./docs/reactivity.md): children, attributes, style:/class:, events, two-way bind
+- [Control flow](./docs/control-flow.md): If / AB / Switch / ForKeyed
+- [Components](./docs/components.md): Component base class, props/children, destroy
+- [Pitfalls](./docs/pitfalls.md): own()/WeakRef GC, classic JSX, native-signal external
+- [API reference](./docs/api.md): full export table
+- [README](./README.md): human overview
