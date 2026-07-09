@@ -21,6 +21,10 @@ import { own } from "./own";
 type SignalLike<T> = { get(): T };
 export type AttrValue = SignalLike<string | boolean | number | null> | string | boolean | number | null;
 
+const PROPERTY_ONLY_KEYS = new Set(["value", "checked", "selected", "indeterminate"]);
+
+const usesLiveProperty = (el : Element, key:string) => PROPERTY_ONLY_KEYS.has(key) && key in el;
+
 export function bind_attrs(
     el: Element,
     attrs: Record<string, AttrValue>,
@@ -59,6 +63,15 @@ export function bind_attrs(
         // ── normal attribute mode ────────────────────────────────────────────
         const apply = (v: string | boolean | number | null) =>
         {
+            if(usesLiveProperty(el, key))
+            {
+                // Live form-control state must go through the IDL property;
+                // setAttribute only touches the initial/default value once
+                // the user (or code) has interacted with the control.
+                (el as any)[key] = v === false || v === null || v === undefined ? "" : String(v === true ? "" : v);
+                return;
+            }
+            
             if (v === false || v === null || v === undefined)
                 el.removeAttribute(key);
             else if (v === true)

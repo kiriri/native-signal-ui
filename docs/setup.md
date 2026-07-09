@@ -65,7 +65,15 @@ Add a single ambient declaration file covered by your `include` — e.g.
 **`src/signal-ui.d.ts`**:
 
 ```ts
-import "native-signal-ui";
+// Mirrors the symbols vite's esbuild `jsxInject` adds to every JSX module,
+// so the TS language server resolves the classic factory the same way the build does.
+import type { runtime } from "native-signal-ui";
+
+declare global {
+  const h: typeof runtime.h;
+  const Fragment: typeof runtime.Fragment;
+}
+
 export {};
 ```
 
