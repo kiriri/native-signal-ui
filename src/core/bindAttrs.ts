@@ -68,6 +68,9 @@ export function bind_attrs(
                 // Live form-control state must go through the IDL property;
                 // setAttribute only touches the initial/default value once
                 // the user (or code) has interacted with the control.
+                if(typeof (el as any)[key] === "boolean")
+                    (el as any)[key] = v;
+
                 (el as any)[key] = v === false || v === null || v === undefined ? "" : String(v === true ? "" : v);
                 return;
             }
