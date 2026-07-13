@@ -39,6 +39,6 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
-    "native-signal": "^0.5.16"
+    "native-signal": "^0.6.0"
   }
 }
