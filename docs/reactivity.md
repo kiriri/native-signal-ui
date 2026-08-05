@@ -68,6 +68,10 @@ const isOpen = new NativeSignal(true);
 />;
 ```
 
+Order matters if you also set a plain `class` attribute: put `class="..."`
+*before* any `class:foo={...}` on the same element, or the plain assignment
+will overwrite the toggled class. See [Pitfalls](./pitfalls.md).
+
 You can also pass a whole-`style` object or string:
 
 ```tsx

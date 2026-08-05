@@ -36,6 +36,30 @@ The `ForKeyed` `Computed` triggers insert / remove / reorder. Reactivity
 *within* an item (e.g. an editable field) is the mapper's responsibility — bind
 signals inside the mapped node. See [Control flow](./control-flow.md).
 
+## `class:` must come *after* a plain `class` attribute
+
+Attribute props apply in source (object key) order. A plain `class="..."`
+assignment sets `className` wholesale; a `class:foo={...}` binding only
+toggles that one token. If `class:foo` appears *before* `class` in the JSX,
+the plain assignment runs second and wipes out the toggle:
+
+```tsx
+// BUG: "active" gets set, then immediately erased by class="row"
+<div class:active={isActive} class="row" />
+
+// correct: plain class first, then the namespaced toggle
+<div class="row" class:active={isActive} />
+```
+
+With a **reactive** `isActive` (a `Computed`/`NativeSignal`), this only
+corrupts the *initial* render — the class re-appears correctly the next time
+the signal changes, since `classList.toggle` only touches its own token and
+no longer competes with a later `class=` write. With a **plain** boolean,
+there's no subsequent reactive update to self-heal it, so the class is lost
+for good. This is especially easy to hit in a list row that's fully rebuilt
+from scratch on every change (rather than diffed in place): every rebuild
+re-triggers the same ordering bug, so the "active" row never highlights.
+
 ## Inadvertent constructor time signal bindings
 
 When you create parts of the dom inside a Computed, make sure to use `detached` from 

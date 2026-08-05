@@ -68,8 +68,17 @@ export function bind_attrs(
                 // Live form-control state must go through the IDL property;
                 // setAttribute only touches the initial/default value once
                 // the user (or code) has interacted with the control.
+                //
+                // The `return` matters: `checked` / `selected` /
+                // `indeterminate` are boolean properties, and falling through
+                // to the string line below assigns `""` to them — which
+                // coerces to false, so `checked={signal}` could never render a
+                // checked box. Only `value` takes the string branch.
                 if(typeof (el as any)[key] === "boolean")
-                    (el as any)[key] = v;
+                {
+                    (el as any)[key] = v === true || (v !== false && v !== null && v !== undefined && v !== "");
+                    return;
+                }
 
                 (el as any)[key] = v === false || v === null || v === undefined ? "" : String(v === true ? "" : v);
                 return;
