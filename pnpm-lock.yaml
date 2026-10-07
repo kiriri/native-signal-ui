@@ -15,8 +15,8 @@ importers:
         specifier: ^15.7.4
         version: 15.11.7
       native-signal:
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: ^0.6.1
+        version: 0.6.1
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
@@ -461,8 +461,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  native-signal@0.6.0:
-    resolution: {integrity: sha512-Ylhlsj9jb37Fjkc00j2zuzZf4PdgT9IGGAm0zHpzaHydTfBVtlfw+JramS+iPWgC8H/ibkkoGgny3kRW+mvmnQ==}
+  native-signal@0.6.1:
+    resolution: {integrity: sha512-TWtU9gcZZqjSGO5TNgDqKiKkeBAQA2Pbwk41cKKh2F+GRt6OY0dF8GGUVB8+vwilRUqvVnrxpwm7FTW2/zQPBw==}
 
   npm-run-path@5.3.0:
     resolution: {integrity: sha512-ppwTtiJZq0O/ai0z7yfudtBpWIoxM8yE6nHi1X47eFR2EWORqfbu6CnPlNsjeN683eT0qG6H/Pyf9fCcvjnnnQ==}
@@ -982,7 +982,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  native-signal@0.6.0: {}
+  native-signal@0.6.1: {}
 
   npm-run-path@5.3.0:
     dependencies:

@@ -5,7 +5,7 @@ All exports come from `native-signal-ui`. Reactivity primitives
 
 | Export        | Kind                | Purpose                                            |
 | ------------- | ------------------- | -------------------------------------------------- |
-| `runtime`     | namespace           | `runtime.h` / `runtime.Fragment` JSX factory       |
+| `runtime`     | namespace           | `runtime.h` / `runtime.Fragment` JSX factory; `runtime.SVG_NS` |
 | `If`          | function            | Conditional rendering                              |
 | `AB`          | function            | Two-branch toggle                                  |
 | `Switch`      | function            | Multi-branch by signal value                       |
@@ -16,6 +16,6 @@ All exports come from `native-signal-ui`. Reactivity primitives
 | `own`         | function            | Keep a value alive as long as its owners exist     |
 | `Component`   | abstract class      | Base class for components                          |
 
-Topic guides: [Setup](./setup.md) · [Reactivity](./reactivity.md) ·
+Topic guides: [Setup](./setup.md) · [Reactivity](./reactivity.md) · [SVG](./svg.md) ·
 [Control flow](./control-flow.md) · [Components](./components.md) ·
 [Pitfalls](./pitfalls.md)

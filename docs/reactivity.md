@@ -113,5 +113,5 @@ const [textarea, cleanup] = boundTextarea(bodySignal);
 
 ---
 
-Next: [Control flow](./control-flow.md) · [Components](./components.md) ·
+Next: [SVG](./svg.md) · [Control flow](./control-flow.md) · [Components](./components.md) ·
 [Pitfalls (`own` / GC)](./pitfalls.md) · [API reference](./api.md)

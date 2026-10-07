@@ -20,6 +20,10 @@ This file is for AI agents. End users: see [README.md](./README.md).
 - **A JSX expression is a live DOM node.** There is no render loop. Building the
   node runs once; signals update sub-parts in place. Don't reach for re-render
   patterns.
+- **SVG namespace is chosen by tag name**, not by the enclosing `<svg>` (JSX
+  builds children first). `a` / `script` / `style` / `title` are HTML unless
+  written `svg:a`, `svg:title`, …; SVG props are set as attributes verbatim
+  (`stroke-width`, not `strokeWidth`). → [docs/svg.md](./docs/svg.md)
 - **WeakRef GC trap:** subscribers are held via `WeakRef`. A subscription you
   create yourself can be silently collected — anchor it with `own(fn, owner)`.
   Built-in bindings/control-flow already use `own` internally.
@@ -29,6 +33,7 @@ This file is for AI agents. End users: see [README.md](./README.md).
 
 - [Setup (Vite + TS, JSX factory, global JSX types)](./docs/setup.md)
 - [Reactivity in JSX (children, attrs, `style:`/`class:`, events, `bind`)](./docs/reactivity.md)
+- [SVG (namespace by tag name, `svg:a` / `svg:title`, attributes verbatim)](./docs/svg.md)
 - [Control flow (`If` / `AB` / `Switch` / `ForKeyed`)](./docs/control-flow.md)
 - [Components (`Component`, `to_html`, props/children, `destroy`)](./docs/components.md)
 - [Pitfalls & gotchas (`own` / GC, classic JSX, externals)](./docs/pitfalls.md)

@@ -7,6 +7,13 @@ This library uses `jsxFactory: "runtime.h"` / `jsxFragmentFactory:
 "Cannot find name 'runtime'" or JSX compiling to `_jsx(...)`, your `tsconfig` /
 bundler is misconfigured. See [Setup](./setup.md).
 
+## `<title>` / `<a>` inside `<svg>` need the `svg:` prefix
+
+`a`, `script`, `style` and `title` exist in HTML and SVG. JSX builds children
+before parents, so the runtime can't see the enclosing `<svg>`, and these four
+tags default to HTML. An HTML `<title>` inside an `<svg>` silently does nothing.
+Write `<svg:title>`, `<svg:a>`. See [SVG](./svg.md).
+
 ## `own(value, ...owners)` — the WeakRef trap
 
 `native-signal/weak` retains subscribers via `WeakRef`. If your subscriber closure

@@ -23,6 +23,28 @@ export type AttrValue = SignalLike<string | boolean | number | null> | string | 
 
 const PROPERTY_ONLY_KEYS = new Set(["value", "checked", "selected", "indeterminate"]);
 
+const STRINGIFY_BOOL = new Set(["draggable", "spellcheck", "contenteditable"]);
+
+const stringifies_bool = (el: Element, key: string) =>
+    key.startsWith("aria-") || key.startsWith("data-") || STRINGIFY_BOOL.has(key)
+|| el.namespaceURI === "http://www.w3.org/2000/svg";
+
+// Set (or `remove` for `false` / `null` / `undefined`) a plain attribute. `true` sets it empty,
+// unless it's a known stringified boolean type like `aria-expanded`.
+export function set_attribute(el: Element, key: string, v: AttrValue | undefined): void
+{
+    if (v === null || v === undefined)
+        el.removeAttribute(key);
+    else if (typeof v === "boolean" && stringifies_bool(el, key))
+        el.setAttribute(key, String(v));
+    else if (v === false)
+        el.removeAttribute(key);
+    else if (v === true)
+        el.setAttribute(key, "");
+    else
+        el.setAttribute(key, String(v));
+}
+
 const usesLiveProperty = (el : Element, key:string) => PROPERTY_ONLY_KEYS.has(key) && key in el;
 
 export function bind_attrs(
@@ -83,13 +105,8 @@ export function bind_attrs(
                 (el as any)[key] = v === false || v === null || v === undefined ? "" : String(v === true ? "" : v);
                 return;
             }
-            
-            if (v === false || v === null || v === undefined)
-                el.removeAttribute(key);
-            else if (v === true)
-                el.setAttribute(key, "");
-            else
-                el.setAttribute(key, String(v));
+
+            set_attribute(el, key, v);
         };
 
         if (isSignal)

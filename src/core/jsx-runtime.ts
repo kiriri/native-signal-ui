@@ -1,5 +1,5 @@
 import { Computed, NativeSignal } from "native-signal/weak";
-import { bind_attrs, type AttrValue } from "./bindAttrs";
+import { bind_attrs, set_attribute, type AttrValue } from "./bindAttrs";
 import { own } from "./own";
 import { Component } from "../components/Component";
 
@@ -35,6 +35,43 @@ export type Child =
     | Promise<Child>
     | { to_html(): Child }
     | Child[];
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Namespaces
+ *
+ * JSX is evaluated bottom-up (children before parents), so an element cannot
+ * inherit its namespace from an enclosing <svg>. Instead the namespace is
+ * decided by tag name: every SVG-only tag is created in the SVG namespace
+ * wherever it appears. The four tags that exist in both HTML and SVG
+ * (a, script, style, title) default to HTML; write `svg:a`, `svg:title`, …
+ * to get the SVG element. Any SVG tag may carry the `svg:` prefix.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+export const SVG_NS = "http://www.w3.org/2000/svg";
+const XLINK_NS = "http://www.w3.org/1999/xlink";
+const XML_NS = "http://www.w3.org/XML/1998/namespace";
+
+/** JSX tag → local name of the SVG element to create. Tags not in here are HTML. */
+const SVG_TAGS = new Map<string, string>();
+for (const tag of [
+    "animate", "animateMotion", "animateTransform", "circle", "clipPath", "defs", "desc",
+    "ellipse", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite",
+    "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight",
+    "feDropShadow", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur",
+    "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight",
+    "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "filter", "foreignObject",
+    "g", "image", "line", "linearGradient", "marker", "mask", "metadata", "mpath", "path",
+    "pattern", "polygon", "polyline", "radialGradient", "rect", "set", "stop", "svg",
+    "switch", "symbol", "text", "textPath", "tspan", "use", "view",
+])
+{
+    SVG_TAGS.set(tag, tag);
+    SVG_TAGS.set(`svg:${tag}`, tag);
+}
+for (const tag of ["a", "script", "style", "title"])
+    SVG_TAGS.set(`svg:${tag}`, tag);
+
+const is_svg = (el: Element) => el.namespaceURI === SVG_NS;
 
 export function is_reactive(v: unknown): v is Reactive
 {
@@ -147,11 +184,30 @@ export function mount_reactive(signal: Reactive, _owner: Node, parent_slot: Slot
 {
     const slot = create_slot("sig");
     let initial_nodes: Node[] | null = null;
+    // The slot's only node while the last value was a string/number/bigint.
+    let text: Text | null = null;
 
     const computed = new Computed(() =>
     {
         const value = signal.get() as Child;
+        const primitive = typeof value === "string" || typeof value === "number" || typeof value === "bigint";
+
+        // Primitive → primitive: rewrite the existing text node in place
+        // instead of replacing it.
+        if (primitive && text !== null)
+        {
+            text.data = String(value);
+            return;
+        }
+
+        // Subsequent runs: tear down the previous content *before* building the
+        // new one. normalize_child registers nested reactive children in
+        // slot.children_computeds, and clear_slot destroys everything listed
+        // there — clearing afterwards would kill the bindings just created.
+        if (initial_nodes !== null) clear_slot(slot);
+
         const nodes = normalize_child(value, slot.start, slot);
+        text = primitive ? nodes[0] as Text : null;
 
         if (initial_nodes === null)
         {
@@ -161,8 +217,7 @@ export function mount_reactive(signal: Reactive, _owner: Node, parent_slot: Slot
             initial_nodes = nodes;
         } else
         {
-            // Subsequent runs: anchors are live, update in place.
-            clear_slot(slot);
+            // Anchors are live, insert in place.
             fill_slot(slot, nodes);
         }
     }, undefined, true);
@@ -191,7 +246,9 @@ export function mount_promise(promise: Promise<Child>, owner: Node): Node[]
     return [anchor];
 }
 
-export function bind_style_signal(el: HTMLElement, key: string, signal: Reactive): void
+type StyledElement = Element & ElementCSSInlineStyle;
+
+export function bind_style_signal(el: StyledElement, key: string, signal: Reactive): void
 {
     const computed = new Computed(() =>
     {
@@ -204,7 +261,7 @@ export function bind_style_signal(el: HTMLElement, key: string, signal: Reactive
     own(computed, el);
 }
 
-export function apply_style_prop(el: HTMLElement, value: unknown, key?: string): void
+export function apply_style_prop(el: StyledElement, value: unknown, key?: string): void
 {
     // Single-property mode: `style:color={...}` routes here with key === "color".
     if (key !== undefined)
@@ -263,7 +320,7 @@ export function apply_style_prop(el: HTMLElement, value: unknown, key?: string):
     }
 }
 
-export function apply_prop(el: Element, key: string, value: unknown): void
+export function apply_prop(el: Element, key: string, value: unknown, svg: boolean = is_svg(el)): void
 {
     if (key.startsWith("on") && typeof value === "function")
     {
@@ -273,12 +330,23 @@ export function apply_prop(el: Element, key: string, value: unknown): void
     }
     if (key === "class" || key === "className")
     {
-        (el as HTMLElement).className = value == null ? "" : value as string;
+        // SVG's `className` is a read-only SVGAnimatedString; go through the attribute.
+        if (svg)
+            set_attribute(el, "class", value as AttrValue);
+        else
+            (el as HTMLElement).className = value == null ? "" : value as string;
         return;
     }
     if (key === "style")
     {
-        apply_style_prop(el as HTMLElement, value);
+        apply_style_prop(el as StyledElement, value);
+        return;
+    }
+    if (svg)
+    {
+        // SVG DOM properties (cx, width, viewBox, href, …) are read-only
+        // SVGAnimated* objects, so attributes are the only way in.
+        set_attribute(el, key, value as AttrValue);
         return;
     }
     if (value === undefined || value === null || value === false )
@@ -307,14 +375,31 @@ export function apply_prop(el: Element, key: string, value: unknown): void
         el.setAttribute(key, String(value));
 }
 
-export function apply_props(el: Element, props: Record<string, unknown> | null): void
+/** `xlink:href`, `xml:lang`, … — attributes that must be set with their namespace. */
+function apply_ns_attr(el: Element, ns: string, key: string, value: unknown): void
+{
+    const local = key.slice(key.indexOf(":") + 1);
+    const apply = (v: unknown) =>
+    {
+        if (v === undefined || v === null || v === false)
+            el.removeAttributeNS(ns, local);
+        else
+            el.setAttributeNS(ns, key, v === true ? "" : String(v));
+    };
+    if (is_reactive(value))
+        own(new Computed(() => apply(value.get()), undefined, true), el);
+    else
+        apply(value);
+}
+
+export function apply_props(el: Element, props: Record<string, unknown> | null, svg: boolean = is_svg(el)): void
 {
     if (!props) return;
     for (const key in props)
     {
         const value = props[key] as AttrValue;
 
-        // namespace syntax: `style:color`, `class:open`
+        // namespace syntax: `style:color`, `class:open`, `xlink:href`
         const colon = key.indexOf(":");
         if (colon > 0)
         {
@@ -322,7 +407,7 @@ export function apply_props(el: Element, props: Record<string, unknown> | null):
             const sub = key.slice(colon + 1);
             if (ns === "style")
             {
-                apply_style_prop(el as HTMLElement, value, sub);
+                apply_style_prop(el as StyledElement, value, sub);
                 continue;
             }
             if (ns === "class")
@@ -331,11 +416,16 @@ export function apply_props(el: Element, props: Record<string, unknown> | null):
                 bind_attrs(el, { [`class.${sub}`]: value as AttrValue });
                 continue;
             }
+            if (ns === "xlink" || ns === "xml")
+            {
+                apply_ns_attr(el, ns === "xlink" ? XLINK_NS : XML_NS, key, value);
+                continue;
+            }
         }
 
-        if (key === "style") { apply_style_prop(el as HTMLElement, value); continue; }
-        if (is_reactive(value)) { bind_attrs(el, { [key]: value }); continue; }
-        apply_prop(el, key, value);
+        if (key === "style") { apply_style_prop(el as StyledElement, value); continue; }
+        if (is_reactive(value)) { bind_attrs(el, { [key === "className" ? "class" : key]: value }); continue; }
+        apply_prop(el, key, value, svg);
     }
 }
 
@@ -390,8 +480,11 @@ export function h(
 
     if (typeof tag !== "string") throw new Error(`h(): unsupported tag ${String(tag)}`);
 
-    const el = document.createElement(tag);
-    apply_props(el, props);
+    const svg_tag = SVG_TAGS.get(tag);
+    const el = svg_tag === undefined
+        ? document.createElement(tag)
+        : document.createElementNS(SVG_NS, svg_tag);
+    apply_props(el, props, svg_tag !== undefined);
     for (const child of children)
         for (const node of normalize_child(child, el, null)) el.appendChild(node);
     return el;

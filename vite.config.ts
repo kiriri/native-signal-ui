@@ -2,6 +2,11 @@ import { defineConfig } from "vite";
 import { resolve } from "node:path";
 
 export default defineConfig({
+  // Classic JSX for the .tsx tests (the library itself contains no JSX).
+  esbuild: {
+    jsxFactory: "h",
+    jsxFragment: "Fragment"
+  },
   build: {
     lib: {
       entry: {
@@ -25,6 +30,6 @@ export default defineConfig({
   test: {
     environment: "happy-dom",
     globals: true,
-    include: ["tests/**/*.test.ts"]
+    include: ["tests/**/*.test.{ts,tsx}"]
   }
 });

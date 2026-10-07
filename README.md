@@ -22,6 +22,8 @@ agent working in a downstream project can read them from
   making the global `JSX` types visible. *This is the part that trips people up.*
 - **[Reactivity in JSX](./docs/reactivity.md)** — reactive children & attributes,
   `style:` / `class:` namespaced attrs, events, and two-way form `bind`.
+- **[SVG](./docs/svg.md)** — SVG elements in JSX, `svg:a` / `svg:title`, attribute
+  naming.
 - **[Control flow](./docs/control-flow.md)** — `If`, `AB`, `Switch`, `ForKeyed`.
 - **[Components](./docs/components.md)** — the `Component` base class.
 - **[Pitfalls](./docs/pitfalls.md)** — `own()` / WeakRef GC, classic vs. automatic
@@ -104,6 +106,8 @@ todos.set([{ id: 0, text: "New Todo!" }]);
 - `npm run dev` — Vite dev server
 - `npm test` — run the vitest suite
 - `npm run typecheck` — `tsc --noEmit`
+- `npm run bench` — benchmark in headless Chromium (`-- --baseline <dir>` to
+  compare against another `src/` tree; see `bench/run.mjs`)
 
 ---
 
