@@ -42,6 +42,6 @@
   },
   "_peerDependencies": "native-signal holds its dependency-tracking state in EventManager's static fields, so two copies in one app track nothing across the boundary. As a peer it is resolved once, by the consumer. rollupOptions.external in vite.config.ts already assumes this — it must never appear under `dependencies`.",
   "peerDependencies": {
-    "native-signal": "^0.6.0"
+    "native-signal": "^0.6.1"
   }
 }
