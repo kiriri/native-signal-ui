@@ -19,3 +19,6 @@ All exports come from `native-signal-ui`. Reactivity primitives
 Topic guides: [Setup](./setup.md) · [Reactivity](./reactivity.md) · [SVG](./svg.md) ·
 [Control flow](./control-flow.md) · [Components](./components.md) ·
 [Pitfalls](./pitfalls.md)
+
+From `native-signal-ui/i18n`: `create_translations` and its types, see
+[Translations](./i18n.md).

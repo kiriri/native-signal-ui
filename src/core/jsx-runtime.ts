@@ -1,5 +1,5 @@
 import { Computed, NativeSignal } from "native-signal/weak";
-import { bind_attrs, set_attribute, type AttrValue } from "./bindAttrs";
+import { bind_attrs, set_attribute, stringifies_bool, type AttrValue } from "./bindAttrs";
 import { own } from "./own";
 import { Component } from "../components/Component";
 
@@ -349,6 +349,12 @@ export function apply_prop(el: Element, key: string, value: unknown, svg: boolea
         set_attribute(el, key, value as AttrValue);
         return;
     }
+    // `aria-*`, `data-*`, … take "true" / "false", same as the reactive path.
+    if (typeof value === "boolean" && stringifies_bool(el, key))
+    {
+        set_attribute(el, key, value);
+        return;
+    }
     if (value === undefined || value === null || value === false )
     {
         el.removeAttribute(key);
@@ -460,7 +466,11 @@ export function materialise(content: Child | Child[], owner: Node): Node[]
  * ────────────────────────────────────────────────────────────────────────── */
 
 export function h(
-    tag: string | typeof Fragment | (new (p: any) => Component),
+    tag:
+        | string
+        | typeof Fragment
+        | (new (p: any) => Component)
+        | ((props: any) => Child | Component),
     props: Record<string, any> | null,
     ...children: Child[]
 ): JSX.Element | Component<any>
@@ -475,6 +485,29 @@ export function h(
         const frag = document.createDocumentFragment();
         for (const child of children)
             for (const node of normalize_child(child, frag, null)) frag.appendChild(node);
+        return frag;
+    }
+
+    // Plain function component, called, never constructed:
+    //   function Row({ content }) { return <div class="row">{content}</div> }
+    // Children arrive under both spellings (`content`, as the Component branch above
+    // names them, and `children`) so a function and a class stay interchangeable at
+    // the call site. Whatever it returns goes through normalize_child, so a function
+    // may hand back a node, a Component, an array, a signal or a promise.
+    if (typeof tag === "function")
+    {
+        const p: Record<string, any> = { ...(props ?? {}) };
+        if (children.length)
+        {
+            const kids = children.length === 1 ? children[0] : children;
+            if (p.content === undefined) p.content = kids;
+            if (p.children === undefined) p.children = kids;
+        }
+        const out = (tag as (props: any) => Child | Component)(p);
+        if (out instanceof Component || out instanceof Node)
+            return out as JSX.Element | Component;
+        const frag = document.createDocumentFragment();
+        for (const node of normalize_child(out as Child, frag, null)) frag.appendChild(node);
         return frag;
     }
 

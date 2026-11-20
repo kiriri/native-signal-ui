@@ -25,7 +25,7 @@ const PROPERTY_ONLY_KEYS = new Set(["value", "checked", "selected", "indetermina
 
 const STRINGIFY_BOOL = new Set(["draggable", "spellcheck", "contenteditable"]);
 
-const stringifies_bool = (el: Element, key: string) =>
+export const stringifies_bool = (el: Element, key: string) =>
     key.startsWith("aria-") || key.startsWith("data-") || STRINGIFY_BOOL.has(key)
 || el.namespaceURI === "http://www.w3.org/2000/svg";
 

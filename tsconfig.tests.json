@@ -1,0 +1,14 @@
+{
+  // Type-checks the tests too, so compile-time assertions in them
+  // (`@ts-expect-error`, typed assignments) actually run: `npm run typecheck`.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": ".",
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment"
+  },
+  "include": ["src/**/*", "tests/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

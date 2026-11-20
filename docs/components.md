@@ -32,6 +32,26 @@ const view = <Card title="Hello">some children</Card>;
   directly in the JSX. See [Reactivity in JSX](./reactivity.md). There is **no**
   re-render: the constructor builds the DOM once and signals update it in place.
 
+## Function components
+
+A plain function works as a tag too. It is **called**, not constructed, with
+its props; children arrive as both `content` and `children` (one child as
+itself, several as an array), so a function and a class are interchangeable at
+the call site.
+
+```tsx
+function Pill({ label, content }: { label: string; content?: any }) {
+    return <span class="pill"><b>{label}</b> {content}</span>;
+}
+
+const view = <Pill label="Status">open</Pill>;
+```
+
+It may return anything a JSX child can be: a node or a `Component` comes back
+as-is, anything else (an array, a signal, a string, a promise) is wrapped in a
+`DocumentFragment`. Like a class, it runs once; bind signals for anything that
+changes.
+
 ## Keeping subscriptions alive
 
 If a component sets up its own `signal.subscribe(...)` (rather than binding a

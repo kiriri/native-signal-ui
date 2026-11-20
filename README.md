@@ -26,6 +26,8 @@ agent working in a downstream project can read them from
   naming.
 - **[Control flow](./docs/control-flow.md)** — `If`, `AB`, `Switch`, `ForKeyed`.
 - **[Components](./docs/components.md)** — the `Component` base class.
+- **[Translations](./docs/i18n.md)**: `native-signal-ui/i18n`, reactive UI text over
+  app-defined languages and locale.
 - **[Pitfalls](./docs/pitfalls.md)** — `own()` / WeakRef GC, classic vs. automatic
   JSX, `native-signal` as an external.
 - **[API reference](./docs/api.md)** — the full export table.

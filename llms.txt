@@ -14,6 +14,7 @@
 - [SVG](./docs/svg.md): SVG elements, svg:a / svg:title, attributes set verbatim
 - [Control flow](./docs/control-flow.md): If / AB / Switch / ForKeyed
 - [Components](./docs/components.md): Component base class, props/children, destroy
+- [Translations](./docs/i18n.md): native-signal-ui/i18n, create_translations, reactive translation keys, computed texts
 - [Pitfalls](./docs/pitfalls.md): own()/WeakRef GC, classic JSX, native-signal external
 - [API reference](./docs/api.md): full export table
 - [README](./README.md): human overview

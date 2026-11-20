@@ -16,6 +16,15 @@ declare global {
             | Text
             | Comment;
 
+        // What may stand as a tag, mirroring h(): an intrinsic name, a function
+        // component, a Component class. Without this TS demands that a function
+        // component return a JSX.Element, though h() also takes arrays, signals,
+        // strings and Components back from one.
+        type ElementType =
+            | string
+            | ((props: any) => unknown)
+            | (new (props: any) => unknown);
+
         type StatefulSubscribable<T> = { get(): T };
         type MaybeSignal<T> = T | StatefulSubscribable<T>;
         type SignalCompatible<T> = {

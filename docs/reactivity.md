@@ -50,7 +50,10 @@ const disabled = new NativeSignal(false);
 ```
 
 Plain (non-signal) values are set once and never tracked. Falsy boolean / `null`
-values remove the attribute; `true` sets it as a boolean attribute.
+values remove the attribute; `true` sets it as a boolean attribute. The
+exception: `aria-*`, `data-*`, `draggable`,
+`spellcheck`, `contenteditable` and SVG attributes take booleans as the strings
+`"true"` / `"false"`.
 
 ## `style:` and `class:` namespaced attributes
 

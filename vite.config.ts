@@ -11,6 +11,9 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, "src/index.ts"),
+        // Its own subpath (`native-signal-ui/i18n`): no DOM, so apps that
+        // don't translate don't carry it.
+        i18n: resolve(__dirname, "src/i18n/index.ts"),
       },
       formats: ["es"]
     },
