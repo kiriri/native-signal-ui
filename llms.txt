@@ -12,7 +12,7 @@
 - [Setup (Vite + TypeScript)](./docs/setup.md): JSX factory wiring, global JSX types
 - [Reactivity in JSX](./docs/reactivity.md): children, attributes, style:/class:, events, two-way bind
 - [SVG](./docs/svg.md): SVG elements, svg:a / svg:title, attributes set verbatim
-- [Control flow](./docs/control-flow.md): If / AB / Switch / ForKeyed
+- [Control flow](./docs/control-flow.md): If / AB / Switch / ForKeyed / ForCollection
 - [Components](./docs/components.md): Component base class, props/children, destroy
 - [Translations](./docs/i18n.md): native-signal-ui/i18n, create_translations, reactive translation keys, computed texts
 - [Pitfalls](./docs/pitfalls.md): own()/WeakRef GC, classic JSX, native-signal external

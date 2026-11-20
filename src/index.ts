@@ -4,6 +4,7 @@ import "./core/jsx";
 
 export * from "./core/AB";
 export * from "./core/For";
+export * from "./core/ForCollection";
 export * from "./core/own";
 export * from "./core/If";
 export * from "./core/bind";

@@ -24,7 +24,7 @@ agent working in a downstream project can read them from
   `style:` / `class:` namespaced attrs, events, and two-way form `bind`.
 - **[SVG](./docs/svg.md)** — SVG elements in JSX, `svg:a` / `svg:title`, attribute
   naming.
-- **[Control flow](./docs/control-flow.md)** — `If`, `AB`, `Switch`, `ForKeyed`.
+- **[Control flow](./docs/control-flow.md)** — `If`, `AB`, `Switch`, `ForKeyed`, `ForCollection`.
 - **[Components](./docs/components.md)** — the `Component` base class.
 - **[Translations](./docs/i18n.md)**: `native-signal-ui/i18n`, reactive UI text over
   app-defined languages and locale.

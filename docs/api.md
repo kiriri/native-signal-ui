@@ -10,6 +10,7 @@ All exports come from `native-signal-ui`. Reactivity primitives
 | `AB`          | function            | Two-branch toggle                                  |
 | `Switch`      | function            | Multi-branch by signal value                       |
 | `ForKeyed`    | function            | Keyed list rendering                               |
+| `ForCollection` | function          | List over a `KeyedCollection`, O(changes) updates  |
 | `bind`        | function            | Two-way form ↔ signal binding                      |
 | `boundInput` / `boundSelect` / `boundTextarea` | functions | Build + bind a form element in one call |
 | `bind_attrs`  | function            | Imperatively bind a record of attrs to an element  |

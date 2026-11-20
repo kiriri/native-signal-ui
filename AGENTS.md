@@ -34,7 +34,7 @@ This file is for AI agents. End users: see [README.md](./README.md).
 - [Setup (Vite + TS, JSX factory, global JSX types)](./docs/setup.md)
 - [Reactivity in JSX (children, attrs, `style:`/`class:`, events, `bind`)](./docs/reactivity.md)
 - [SVG (namespace by tag name, `svg:a` / `svg:title`, attributes verbatim)](./docs/svg.md)
-- [Control flow (`If` / `AB` / `Switch` / `ForKeyed`)](./docs/control-flow.md)
+- [Control flow (`If` / `AB` / `Switch` / `ForKeyed` / `ForCollection`)](./docs/control-flow.md)
 - [Components (`Component`, `to_html`, props/children, `destroy`)](./docs/components.md)
 - [Translations (`native-signal-ui/i18n`: `create_translations`, app-defined languages and locale source)](./docs/i18n.md)
 - [Pitfalls & gotchas (`own` / GC, classic JSX, externals)](./docs/pitfalls.md)
